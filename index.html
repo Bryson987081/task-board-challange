@@ -22,26 +22,39 @@
     </header>
     <div class="container">
         <div class="text-center mb-5">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add Task</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#formModal">Add
+                Task</button>
         </div>
         <!-- Todo: Create a modal with a form to add tasks -->
-        <form id="task-form">
-            <div class="form-group">
-                <label for="task-title">Title</label>
-                <input type="Title" class="form-control" id="task-title">
+        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="formModalLabel">Add Task</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-body">
+                            <form id="task-form">
+                                <div class="mb-3">
+                                    <label for="task-title" class="col-from-lable">Title</label>
+                                    <input type="Title" class="form-control" id="task-title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="due-date" class="col-from-lable">Due date</label>
+                                    <input type="date" class="form-control" id="due-date">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description">Task Description</label>
+                                    <textarea class="form-control" id="description" rows="3"></textarea>
+                                </div>
+                                <div id="add-more-task">
+                                    <button type="submit" class="btn btn-success">Add Task</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="due-date">Due date</label>
-                <input type="date" class="form-control" id="due-date">
-            </div>
-            <div class="form-group">
-                <label for="description">Task Description</label>
-                <textarea class="form-control" id="description" rows="3"></textarea>
-            </div>
-            <div id="add-more-task">
-                <button type="submit" class="btn btn-custom">Add Task</button>
-            </div>
-        </form>
+        </div>
         <div id="task-display">
             <div class="row swim-lanes text-center justify-content-between">
                 <div class="col-12 col-lg-4 d-flex">

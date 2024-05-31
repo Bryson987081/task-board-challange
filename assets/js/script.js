@@ -93,8 +93,11 @@ function renderTaskList() {
 // TODO: create a function to handle adding a new task
 function handleAddTask(event) {
     // create a new task object
-
+   
     // add the new task to the taskList save and render
+    let task = JSON.parse(localStorage.getItem("task")) || [];
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // TODO: create a function to handle deleting a task
