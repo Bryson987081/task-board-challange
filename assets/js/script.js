@@ -17,9 +17,14 @@ function generateTaskId() {
         status: 'to-do',
     };
     // if nextId does not exist in localStorage, set it to 1
+    if (!localStorage.getItem('nextId')) {
+        localStorage.setItem('nextId', 1);
 
-    // otherwise, increment it by 1
-
+        // otherwise, increment it by 1
+    } else {
+        let currentId = parseInt(localStorage.getItem('nextId'));
+        localStorage.setItem('nextId', currentId + 1);
+    }
     // save nextId to localStorage
     const task = ('nextId');
     task.push(nextId);
@@ -28,30 +33,61 @@ function generateTaskId() {
 // TODO: create a function to create a task card
 function createTaskCard(task) {
     // create card elements
+    const card = document.createElement('div');
+    const cardTitle = document.createElement('h2');
+    const cardText = document.createElement('p');
+    const cardDueDate = document.createElement('p');
+    const cardButton = document.createElement('button');
 
     // set card background color based on due date
-if (task.dueDate && task.status !== 'done'){
-    const current = dayjs();
-    const taskDueDate = dayjs(task,dueDate, 'DD/MM/YYYY');
-    if (current.isSame(taskDueDate, 'day')) {
-        createTaskCard.addClass('bg-warning text-white');
-    } else if (current,isAfter(taskDueDate)) {
-        TaskCard.addClass('bg-danger text-white');
+    if (task.dueDate && task.status !== 'done') {
+        const current = dayjs();
+        const taskDueDate = dayjs(task, dueDate, 'DD/MM/YYYY');
+        if (current.isSame(taskDueDate, 'day')) {
+            createTaskCard.addClass('bg-warning text-white');
+        } else if (current, isAfter(taskDueDate)) {
+            TaskCard.addClass('bg-danger text-white');
+        }
+
     }
-}
     // append card elements
+    taskDisplayEl.append(card);
+    card.append(cardTitle);
+    card.append(cardText);
+    card.append(cardDueDate);
+    card.append(cardButton);
 
 }
 
 // TODO: create a function to render the task list and make cards draggable
 function renderTaskList() {
     // if taskList is null, set it to an empty array
-
+    if (taskList === null) {
+        taskList = [];
+    }
     // empty existing task cards
-
+    const todoList = $('#todo-cards');
+    todoList.empty();
+    const inProgressList = $('#in-progress-cards');
+    inProgressList.empty();
+    const doneList = $('#done-cards');
+    doneList.empty();
     // loop through tasks and create task cards for each status
-
+    for (let task of tasks)
+        
     // make task cards draggable
+    $('.draggable').draggable({
+        opacity: 0.7,
+        zIndex: 100,
+        helper: function (e) {
+            const original = $(e.target).hasClass('ui-draggable')
+            ? $(e.target)
+            : $(e.target).closest('ui-draggable');
+            return original.clone().css({
+                width: original.outerWidth(),
+            })
+        }
+    })
 }
 
 // TODO: create a function to handle adding a new task
