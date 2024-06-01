@@ -33,11 +33,11 @@ function generateTaskId() {
 // TODO: create a function to create a task card
 function createTaskCard(task) {
     // create card elements
-    const card = $('<div class="card mb-3">');
+    const card = $('<div class="card mb-3 draggable">');
     const cardTitle = $('<h2 class="card-title">');
     const cardText = $('<p class="card-body">');
     const cardDueDate = $('<p>');
-    const cardButton = $('<button class="btn btn-primary m-3">Delete</button>');
+    const cardButton = $('<button class="btn btn-danger delete m-3">Delete</button>');
 
     // set card background color based on due date
     if (task.dueDate && task.status !== 'done') {
@@ -48,8 +48,6 @@ function createTaskCard(task) {
         } else if (current, dayjs().isAfter(taskDueDate)) {
             card.addClass('bg-danger text-white');
         }
-
-        console.log(taskDueDate);
 
         cardDueDate.text(taskDueDate.format('ddd, MMM, D YYYY'))
     }
@@ -82,17 +80,9 @@ function renderTaskList() {
     }
         
     // make task cards draggable
-    $('.draggable').draggable({
+    $(".draggable").draggable({
         opacity: 0.7,
         zIndex: 100,
-        helper: function (e) {
-            const original = $(e.target).hasClass('ui-draggable')
-            ? $(e.target)
-            : $(e.target).closest('ui-draggable');
-            return original.clone().css({
-                width: original.outerWidth(),
-            })
-        }
     })
 }
 
@@ -100,8 +90,8 @@ function renderTaskList() {
 function handleAddTask(event) {
     // create a new task object
    const task = {
-    title: "Fun Title",
-    dueDate: "06/01/2024",
+    title: $("#task-title"),
+    dueDate: dayjs(),
    }
     // add the new task to the taskList save and render
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -119,10 +109,18 @@ function handleDeleteTask(event) {
 // TODO: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
     // get the task id and new status from the event
-
+    let tasks = JSON.parse(localStorage.getItem("tasks"));
+    const taskId = ui.draggable[0].dataset.taskId;
+    const newStatus = event.target.id;
     // update the task status of the dragged card
-
+    for (let task of tasks) {
+        if (task.id === taskId) {
+            task.status = newStatus;
+        }
+    }
     // save and render
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTaskList();
 }
 
 // TODO: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
@@ -134,6 +132,9 @@ $(document).ready(function () {
         handleAddTask(event);
     })
     // make lanes droppable
-
+    $('.lane').droppable({
+        accept: '.draggable',
+        drop: handleDrop,
+    });
     // make due date field a date picker
 });
