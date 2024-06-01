@@ -33,25 +33,29 @@ function generateTaskId() {
 // TODO: create a function to create a task card
 function createTaskCard(task) {
     // create card elements
-    const card = document.createElement('div');
-    const cardTitle = document.createElement('h2');
-    const cardText = document.createElement('p');
-    const cardDueDate = document.createElement('p');
-    const cardButton = document.createElement('button');
+    const card = $('<div class="card mb-3">');
+    const cardTitle = $('<h2 class="card-title">');
+    const cardText = $('<p class="card-body">');
+    const cardDueDate = $('<p>');
+    const cardButton = $('<button class="btn btn-primary m-3">Delete</button>');
 
     // set card background color based on due date
     if (task.dueDate && task.status !== 'done') {
         const current = dayjs();
-        const taskDueDate = dayjs(task, dueDate, 'DD/MM/YYYY');
+        const taskDueDate = dayjs(task.dueDate, 'MM/DD/YYYY');
         if (current.isSame(taskDueDate, 'day')) {
-            createTaskCard.addClass('bg-warning text-white');
-        } else if (current, isAfter(taskDueDate)) {
-            TaskCard.addClass('bg-danger text-white');
+            card.addClass('bg-warning text-white');
+        } else if (current, dayjs().isAfter(taskDueDate)) {
+            card.addClass('bg-danger text-white');
         }
 
+        console.log(taskDueDate);
+
+        cardDueDate.text(taskDueDate.format('ddd, MMM, D YYYY'))
     }
+    cardTitle.text(task.title)
     // append card elements
-    taskDisplayEl.append(card);
+    taskDisplayEl.find("#todo-cards").append(card);
     card.append(cardTitle);
     card.append(cardText);
     card.append(cardDueDate);
@@ -73,7 +77,9 @@ function renderTaskList() {
     const doneList = $('#done-cards');
     doneList.empty();
     // loop through tasks and create task cards for each status
-    for (let task of tasks)
+    for (let task of taskList) {
+        createTaskCard(task)
+    }
         
     // make task cards draggable
     $('.draggable').draggable({
@@ -93,9 +99,12 @@ function renderTaskList() {
 // TODO: create a function to handle adding a new task
 function handleAddTask(event) {
     // create a new task object
-   
+   const task = {
+    title: "Fun Title",
+    dueDate: "06/01/2024",
+   }
     // add the new task to the taskList save and render
-    let task = JSON.parse(localStorage.getItem("task")) || [];
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
     tasks.push(task);
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
@@ -119,9 +128,11 @@ function handleDrop(event, ui) {
 // TODO: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {
     // render the task list
-
+    renderTaskList();
     // add event listener
-
+    $("#add-more-task button").on("click", function(event){
+        handleAddTask(event);
+    })
     // make lanes droppable
 
     // make due date field a date picker
